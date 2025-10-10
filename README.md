@@ -1,2 +1,8 @@
 # drone-tsp-optimization
-AI project solving Traveling Salesman Problem for drone route optimization to distribute pheromones for Navel Orangeworm. 
+AI solution for finding optimal drone route to distribute pheromones in orchards / farms.
+
+## Use
+
+## Output
+
+## Visualization
