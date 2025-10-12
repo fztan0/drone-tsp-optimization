@@ -33,6 +33,7 @@ def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
 
   return coordinates
 
+# maybe implement loaded vs unloaded data point for integrity check
 def print_loaded_coordinates(coordinates: list[tuple[float, float]]) -> None:
   for idx, (x, y) in enumerate(coordinates, start = 1): # start idx 1 for clarity
     print(f"{idx:3d}: ({x:.7f}, {y:.7f})")
