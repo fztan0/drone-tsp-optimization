@@ -105,8 +105,8 @@ def main() -> None:
 
   computed_distance = compute_route_distance(random_route, distance_matrix)
 
-  print(f"Random route distance: {computed_distance:.7f}")
-  print(f"Random route sequence: {random_route}")
+  # print(f"Random route distance: {computed_distance:.7f}")
+  # print(f"Random route sequence: {random_route}")
 
 
 
