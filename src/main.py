@@ -82,8 +82,10 @@ def main() -> None:
   # print_loaded_coordinates(coordinates)
 
   distance_matrix = initialize_distance_matrix(coordinates)
+  # print_distance_matrix(distance_matrix)
 
-  print_distance_matrix(distance_matrix)
+
+
 
 
   # start computation calls here or something
