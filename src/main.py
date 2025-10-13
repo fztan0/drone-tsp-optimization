@@ -1,7 +1,12 @@
 # main.py
 # refactor and reimplement using numpy later
+import math
 import os
 import random
+import threading
+import time
+
+enter_key_flag = False
 
 def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
   # assuming we are firing from project root
@@ -86,6 +91,16 @@ def generate_random_route(n: int) -> list[int]:
   # using random.sample() because it seems safer(?), creates new lsit instead of random.shuffle() in place
   middle = random.sample(range(1, n), n - 1) # for sequence [1, n), pick k = n - 1 (ALL) items without replacement
   return [0] + middle + [0] # "always returning to the starting point (the recharge bay)"
+
+def wait_enter_key() -> None:
+  global enter_key_flag
+  input() # input() already waits for 'Enter' sooooo
+  enter_key_flag = True
+
+
+
+
+
 
 
 
