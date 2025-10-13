@@ -1,7 +1,7 @@
 # main.py
 # refactor and reimplement using numpy later
-
 import os
+import random
 
 def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
   # assuming we are firing from project root
@@ -69,6 +69,23 @@ def print_distance_matrix(distance_matrix: list[list[float]]) -> None:
       print(f"{distance_matrix[i][j]:.7f}", end = " ")
     print()
 
+def compute_route_distance(route: list[int], distance_matrix: list[list[float]]) -> float:
+  total_distance = 0.0
+  n = len(route) - 1 # we want how many edges, not nodes
+
+  for i in range(n):
+    from_node = route[i]
+    to_node = route[i + 1]
+
+    total_distance += distance_matrix[from_node][to_node]
+
+  return total_distance
+
+# used some online tool to check duplicate values, seems fine
+def generate_random_route(n: int) -> list[int]:
+  # using random.sample() because it seems safer(?), creates new lsit instead of random.shuffle() in place
+  middle = random.sample(range(1, n), n - 1) # for sequence [1, n), pick k = n - 1 (ALL) items without replacement
+  return [0] + middle + [0] # "always returning to the starting point (the recharge bay)"
 
 
 
@@ -84,7 +101,12 @@ def main() -> None:
   distance_matrix = initialize_distance_matrix(coordinates)
   # print_distance_matrix(distance_matrix)
 
+  random_route = generate_random_route(n)
 
+  computed_distance = compute_route_distance(random_route, distance_matrix)
+
+  print(f"Random route distance: {computed_distance:.7f}")
+  print(f"Random route sequence: {random_route}")
 
 
 
