@@ -34,7 +34,7 @@ def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
     exit()
 
   if len(coordinates) > 256:
-    print("Error: File exceeds 256 node limit.")
+    print("Error: File exceeds 256 node limit.\nAborting.")
     exit()
 
   return coordinates
@@ -98,6 +98,7 @@ def wait_enter_key() -> None:
 def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
   global enter_key_flag
 
+  # initial best route and distance
   best_route_so_far = generate_random_route(n)
   best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
 
@@ -120,21 +121,45 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
       print(f"        {math.ceil(best_distance_so_far)}")
 
-
   elapsed_time = time.time() - start_time
 
+  # neat trick to erase the newline created by input() in wait_enter_key(), ANSI so kinda hacky
+  # https://stackoverflow.com/questions/76236463/python-2-print-overwrite
+  print( "\033[F\033[2K", end="", flush=True )
+
+  # Ouput side effect
+  if best_distance_so_far > 6000:
+    print(f"Warning: Solution is {math.ceil(best_distance_so_far)}, greater than the 6000-meter constraint.")
+
+
   return best_route_so_far, best_distance_so_far, elapsed_time
+
+def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> bool:
+  base_name = os.path.splitext(input_file_name)[0] # remove ".txt" extension from input file name
+  out_file_name = f"{base_name}_solution_{math.ceil(distance)}.txt"
+  out_path = os.path.join(os.getcwd(), "output", out_file_name)
+
+  try:
+    with open(out_path, 'w') as file:
+      for node in route:
+        file.write(f"{node + 1}\n") # each subsequent line is a node index
+  except Exception as e:
+    print(f"Error writing to file: {e}\nAborting.")
+    return False
+
+  print(f"Route written to disk as {out_file_name}")
+
+  return True
 
 
 
 
 
 def main() -> None:
-  file_name = input("ComputeDronePath\nEnter the name of file: ")
+  in_file_name = input("ComputeDronePath\nEnter the name of file: ")
+  coordinates = load_coordinate_data(in_file_name)
 
-  coordinates = load_coordinate_data(file_name)
   n = len(coordinates)
-
   print(f"There are {n} nodes, computing route..")
 
   distance_matrix = initialize_distance_matrix(coordinates, n)
@@ -142,7 +167,7 @@ def main() -> None:
   # start computation calls here or something
   best_route, best_distance, elapsed_time = anytime_random(distance_matrix, n)
 
-  print(f"        {math.ceil(best_distance)}")
+  save_route_to_file(best_route, best_distance, n, in_file_name)
 
 
   # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
