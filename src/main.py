@@ -133,7 +133,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   return best_route_so_far, best_distance_so_far
 
-def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> bool:
+def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> None:
   base_name = os.path.splitext(input_file_name)[0] # remove ".txt" extension from input file name
   out_file_name = f"{base_name}_solution_{math.ceil(distance)}.txt"
   out_path = os.path.join(os.getcwd(), "output", out_file_name)
@@ -144,11 +144,11 @@ def save_route_to_file(route: list[int], distance: float, n: int, input_file_nam
         file.write(f"{node + 1}\n") # each subsequent line is a node index
   except Exception as e:
     print(f"Error writing to file: {e}\nAborting.")
-    return False
+    exit()
 
   print(f"Route written to disk as {out_file_name}")
 
-  return True
+  return
 
 
 
