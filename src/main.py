@@ -4,7 +4,6 @@ import math
 import os
 import random
 import threading
-import time
 
 enter_key_flag = False
 
