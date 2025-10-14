@@ -94,12 +94,32 @@ def wait_enter_key() -> None:
   enter_key_flag = True
 
 
+# MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
   global enter_key_flag
 
+  best_route_so_far = generate_random_route(n)
+  best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
+
+  print("    Shortest Route Discovered So Far")
+  print(f"        {math.ceil(best_distance_so_far)}")
+
+  start_time = time.time()
+
+  while not enter_key_flag:
+    new_route = generate_random_route(n)
+    new_distance = compute_route_distance(new_route, distance_matrix, n)
+
+    if new_distance < best_distance_so_far:
+      best_route_so_far = new_route
+      best_distance_so_far = new_distance
+
+      print(f"        {math.ceil(best_distance_so_far)}")
 
 
-  return
+  elapsed_time = time.time() - start_time
+
+  return best_route_so_far, best_distance_so_far, elapsed_time
 
 
 
@@ -117,45 +137,16 @@ def main() -> None:
   #distance_matrix = initialize_distance_matrix(coordinates)
   # print_distance_matrix(distance_matrix)
 
-  #random_route = generate_random_route(n)
-  #computed_distance = compute_route_distance(random_route, distance_matrix)
+  # random_route = generate_random_route(n)
+  # computed_distance = compute_route_distance(random_route, distance_matrix, n)
+  # print(f"random route distance: {computed_distance:.7f}")
+  # print(f"random route sequence: {random_route}")
 
-  #print(f"Random route distance: {computed_distance:.7f}")
 
-  #print("Random route sequence:", *(node + 1 for node in random_route)) #route starts at 1 not 0
 
   # start computation calls here or something
-  print(f"    Shortest Route Discovered So Far")
-  distance_matrix = initialize_distance_matrix(coordinates)
-  random_route = generate_random_route(n)
-  computed_distance = compute_route_distance(random_route, distance_matrix)
-  bestSoFar = math.ceil(computed_distance)
-  print(f"        {bestSoFar}")
-  enter_key = threading.Thread(target=wait_enter_key)
-  enter_key.start()
-  while True:
-    random_route = generate_random_route(n)
-    computed_distance = compute_route_distance(random_route, distance_matrix)
-    # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
-    if(math.ceil(bestSoFar) > math.ceil(computed_distance)):
-      bestSoFar = math.ceil(computed_distance)
-      print(f"        {bestSoFar}") # need to implement threading
-    if enter_key_flag == True:
-      if bestSoFar > 6000:
-        print(f"Warning: Solution is {bestSoFar}, greater than the 6000-meter constraint.")
-      saveRoute = random_route
-      break
-  outputFile = f"{file_name}_SOLUTION_{bestSoFar}.txt"
-  #might be different depending on the os. this accounts for this
-  remove_newLine = len(os.linesep)
-  with open(outputFile, "w") as file:
-    for location in saveRoute:
-      file.write(f"{location+1}\n")
-    #Truncates the file to remove the new line character
-    file.truncate(file.tell() - remove_newLine)
-  print(f"Route written to disk as {file_name}_SOLUTION_{bestSoFar}.txt")
 
-  
+  # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 
 
 
