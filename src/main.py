@@ -45,9 +45,7 @@ def print_loaded_coordinates(coordinates: list[tuple[float, float]]) -> None:
     print(f"{idx:3d}: ({x:.7f}, {y:.7f})")
 
 # python uses binary64 so just let float rip
-def initialize_distance_matrix(coordinates: list[tuple[float, float]]) -> list[list[float]]:
-  n = len(coordinates)
-
+def initialize_distance_matrix(coordinates: list[tuple[float, float]], n: int) -> list[list[float]]:
   distance_matrix = [[0.0 for _ in range(n)] for _ in range(n)]
 
   for i in range(n):
@@ -66,19 +64,17 @@ def initialize_distance_matrix(coordinates: list[tuple[float, float]]) -> list[l
 
   return distance_matrix
 
-def print_distance_matrix(distance_matrix: list[list[float]]) -> None:
-  n = len(distance_matrix)
-
+def print_distance_matrix(distance_matrix: list[list[float]], n: int) -> None:
   for i in range(n):
     for j in range(n):
       print(f"{distance_matrix[i][j]:.7f}", end = " ")
     print()
 
-def compute_route_distance(route: list[int], distance_matrix: list[list[float]]) -> float:
+def compute_route_distance(route: list[int], distance_matrix: list[list[float]], n: int) -> float:
   total_distance = 0.0
-  n = len(route) - 1 # we want how many edges, not nodes
+  num_edges = n - 1 # we want how many edges, not nodes
 
-  for i in range(n):
+  for i in range(num_edges):
     from_node = route[i]
     to_node = route[i + 1]
 
@@ -98,7 +94,12 @@ def wait_enter_key() -> None:
   enter_key_flag = True
 
 
+def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
+  global enter_key_flag
 
+
+
+  return
 
 
 
