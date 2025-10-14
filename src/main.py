@@ -44,7 +44,8 @@ def print_loaded_coordinates(coordinates: list[tuple[float, float]]) -> None:
     print(f"{idx:3d}: ({x:.7f}, {y:.7f})")
 
 # python uses binary64 so just let float rip
-def initialize_distance_matrix(coordinates: list[tuple[float, float]], n: int) -> list[list[float]]:
+def compute_distance_matrix(coordinates: list[tuple[float, float]], n: int) -> list[list[float]]:
+  # initialize n * n matrix with 0.0
   distance_matrix = [[0.0 for _ in range(n)] for _ in range(n)]
 
   for i in range(n):
@@ -130,13 +131,14 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
   if best_distance_so_far > 6000:
     print(f"Warning: Solution is {math.ceil(best_distance_so_far)}, greater than the 6000-meter constraint.")
 
-
   return best_route_so_far, best_distance_so_far
+
 
 def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> None:
   base_name = os.path.splitext(input_file_name)[0] # remove ".txt" extension from input file name
   out_file_name = f"{base_name}_solution_{math.ceil(distance)}.txt"
   out_path = os.path.join(os.getcwd(), "output", out_file_name)
+
 
   try:
     with open(out_path, 'w') as file:
@@ -155,25 +157,27 @@ def save_route_to_file(route: list[int], distance: float, n: int, input_file_nam
   return
 
 
-
-
-
-def main() -> None:
-  in_file_name = input("ComputeDronePath\nEnter the name of file: ")
+def run_random_anytime() -> None:
+  in_file_name = input("Enter the name of file: ")
   coordinates = load_coordinate_data(in_file_name)
 
   n = len(coordinates)
   print(f"There are {n} nodes, computing route..")
 
-  distance_matrix = initialize_distance_matrix(coordinates, n)
+  distance_matrix = compute_distance_matrix(coordinates, n)
 
-  # start computation calls here or something
   best_route, best_distance = anytime_random(distance_matrix, n)
 
   save_route_to_file(best_route, best_distance, n, in_file_name)
 
+  return
 
-  # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
+
+
+# MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
+def main() -> None:
+  run_random_anytime()
+
 
 
 
