@@ -139,6 +139,7 @@ def save_route_to_file(route: list[int], distance: float, n: int, input_file_nam
   out_file_name = f"{base_name}_solution_{math.ceil(distance)}.txt"
   out_path = os.path.join(os.getcwd(), "output", out_file_name)
 
+  os.makedirs(os.path.dirname(out_path), exist_ok = True)
 
   try:
     with open(out_path, 'w') as file:
