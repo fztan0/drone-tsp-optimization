@@ -106,6 +106,10 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   start_time = time.time()
 
+  # spawn a thread to listen for 'Enter' key press and change while loot flag
+  listener_thread = threading.Thread(target = wait_enter_key)
+  listener_thread.start()
+
   while not enter_key_flag:
     new_route = generate_random_route(n)
     new_distance = compute_route_distance(new_route, distance_matrix, n)
@@ -132,19 +136,14 @@ def main() -> None:
   n = len(coordinates)
 
   print(f"There are {n} nodes, computing route..")
-  # print_loaded_coordinates(coordinates)
 
-  #distance_matrix = initialize_distance_matrix(coordinates)
-  # print_distance_matrix(distance_matrix)
-
-  # random_route = generate_random_route(n)
-  # computed_distance = compute_route_distance(random_route, distance_matrix, n)
-  # print(f"random route distance: {computed_distance:.7f}")
-  # print(f"random route sequence: {random_route}")
-
-
+  distance_matrix = initialize_distance_matrix(coordinates, n)
 
   # start computation calls here or something
+  best_route, best_distance, elapsed_time = anytime_random(distance_matrix, n)
+
+  print(f"        {math.ceil(best_distance)}")
+
 
   # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 
