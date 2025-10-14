@@ -114,21 +114,48 @@ def main() -> None:
   print(f"There are {n} nodes, computing route..")
   # print_loaded_coordinates(coordinates)
 
-  distance_matrix = initialize_distance_matrix(coordinates, n)
-  # print_distance_matrix(distance_matrix, n)
+  #distance_matrix = initialize_distance_matrix(coordinates)
+  # print_distance_matrix(distance_matrix)
 
-  random_route = generate_random_route(n)
+  #random_route = generate_random_route(n)
+  #computed_distance = compute_route_distance(random_route, distance_matrix)
 
-  computed_distance = compute_route_distance(random_route, distance_matrix, n)
+  #print(f"Random route distance: {computed_distance:.7f}")
 
-  # print(f"Random route distance: {computed_distance:.7f}")
-  # print(f"Random route sequence: {random_route}")
-
-
+  #print("Random route sequence:", *(node + 1 for node in random_route)) #route starts at 1 not 0
 
   # start computation calls here or something
+  print(f"    Shortest Route Discovered So Far")
+  distance_matrix = initialize_distance_matrix(coordinates)
+  random_route = generate_random_route(n)
+  computed_distance = compute_route_distance(random_route, distance_matrix)
+  bestSoFar = math.ceil(computed_distance)
+  print(f"        {bestSoFar}")
+  enter_key = threading.Thread(target=wait_enter_key)
+  enter_key.start()
+  while True:
+    random_route = generate_random_route(n)
+    computed_distance = compute_route_distance(random_route, distance_matrix)
+    # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
+    if(math.ceil(bestSoFar) > math.ceil(computed_distance)):
+      bestSoFar = math.ceil(computed_distance)
+      print(f"        {bestSoFar}") # need to implement threading
+    if enter_key_flag == True:
+      if bestSoFar > 6000:
+        print(f"Warning: Solution is {bestSoFar}, greater than the 6000-meter constraint.")
+      saveRoute = random_route
+      break
+  outputFile = f"{file_name}_SOLUTION_{bestSoFar}.txt"
+  #might be different depending on the os. this accounts for this
+  remove_newLine = len(os.linesep)
+  with open(outputFile, "w") as file:
+    for location in saveRoute:
+      file.write(f"{location+1}\n")
+    #Truncates the file to remove the new line character
+    file.truncate(file.tell() - remove_newLine)
+  print(f"Route written to disk as {file_name}_SOLUTION_{bestSoFar}.txt")
 
-  # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
+  
 
 
 
