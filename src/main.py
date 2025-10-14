@@ -105,7 +105,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
   print("    Shortest Route Discovered So Far")
   print(f"        {math.ceil(best_distance_so_far)}")
 
-  start_time = time.time()
+  # start_time = time.time()
 
   # spawn a thread to listen for 'Enter' key press and change while loot flag
   listener_thread = threading.Thread(target = wait_enter_key)
@@ -121,7 +121,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
       print(f"        {math.ceil(best_distance_so_far)}")
 
-  elapsed_time = time.time() - start_time
+  # elapsed_time = time.time() - start_time
 
   # neat trick to erase the newline created by input() in wait_enter_key(), ANSI so kinda hacky
   # https://stackoverflow.com/questions/76236463/python-2-print-overwrite
@@ -132,7 +132,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
     print(f"Warning: Solution is {math.ceil(best_distance_so_far)}, greater than the 6000-meter constraint.")
 
 
-  return best_route_so_far, best_distance_so_far, elapsed_time
+  return best_route_so_far, best_distance_so_far
 
 def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> bool:
   base_name = os.path.splitext(input_file_name)[0] # remove ".txt" extension from input file name
@@ -165,7 +165,7 @@ def main() -> None:
   distance_matrix = initialize_distance_matrix(coordinates, n)
 
   # start computation calls here or something
-  best_route, best_distance, elapsed_time = anytime_random(distance_matrix, n)
+  best_route, best_distance = anytime_random(distance_matrix, n)
 
   save_route_to_file(best_route, best_distance, n, in_file_name)
 
