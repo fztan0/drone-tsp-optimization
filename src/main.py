@@ -4,6 +4,7 @@ import math
 import os
 import random
 import threading
+import matplotlib.pyplot as plt
 
 enter_key_flag = False
 
@@ -171,8 +172,33 @@ def run_random_anytime() -> None:
 
   save_route_to_file(best_route, best_distance, n, in_file_name)
 
+  file_name = os.path.join(os.getcwd(), "output", f"{in_file_name}_visualization.png")
+  visualize_solution(coordinates, best_route, best_distance, file_name, title="Random Anytime Route")
+
   return
 
+def visualize_solution(coordinates: list[tuple[float, float]], route: list[int], dist: float, file_name:str, title: str):
+  fig, ax = plt.subplots(figsize=(12, 10))
+  x_coords = [c[0] for c in coordinates]
+  y_coords = [c[1] for c in coordinates]
+
+  for i in range(len(route) - 1):
+    from_i = route[i]
+    to_i = route[i+1]
+    ax.plot([x_coords[from_i], x_coords[to_i]],[y_coords[from_i], y_coords[to_i]],'g-', linewidth=1.5, alpha=0.7, zorder=1)
+            
+  ax.scatter(x_coords, y_coords, c='blue', s=50, zorder=2, edgecolors='white', linewidths=0.5)
+  
+  # Start / End nodes indicated via dark green dot
+  ax.scatter(x_coords[0], y_coords[0], c='darkgreen', s=150, zorder=3, edgecolors='green', linewidths=2)
+
+  ax.text(0.01, 0.01, f'Length of the solution path is {dist:.1f} meters', transform=ax.transAxes, fontsize=12)
+  
+  ax.set_title(title, fontsize=18, fontweight='bold', pad=20)
+
+  plt.savefig(file_name)
+  print(f"Route saved to disk as {file_name}_visualization.png")
+  return
 
 
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
