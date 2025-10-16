@@ -183,7 +183,7 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
   output_file_name = f"{input_file_name}_SOLUTION_{math.ceil(distance)}.png"
   output_path = os.path.join(os.getcwd(), "output", output_file_name)
 
-  fig, ax = plt.subplots(figsize=(12, 10))
+  fig, ax = plt.subplots(figsize=(19.2, 10.8))
   x_coords = [c[0] for c in coordinates]
   y_coords = [c[1] for c in coordinates]
 
@@ -194,8 +194,8 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
 
   ax.scatter(x_coords, y_coords, c='blue', s=50, zorder=2, edgecolors='white', linewidths=0.5)
 
-  # Start / End nodes indicated via dark green dot
-  ax.scatter(x_coords[0], y_coords[0], c='darkgreen', s=150, zorder=3, edgecolors='green', linewidths=2)
+  # Start / End nodes indicated via red dot
+  ax.scatter(x_coords[0], y_coords[0], c='red', s=150, zorder=3, edgecolors='green', linewidths=2)
 
   ax.text(0.01, 0.01, f'Length of the solution path is {distance:.1f} meters', transform=ax.transAxes, fontsize=12)
 
