@@ -135,15 +135,14 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
   return best_route_so_far, best_distance_so_far
 
 
-def save_route_to_file(route: list[int], distance: float, n: int, input_file_name: str) -> None:
-  base_name = os.path.splitext(input_file_name)[0] # remove ".txt" extension from input file name
-  out_file_name = f"{base_name}_solution_{math.ceil(distance)}.txt"
-  out_path = os.path.join(os.getcwd(), "output", out_file_name)
+def save_route_to_text_file(route: list[int], distance: float, n: int, input_file_name: str) -> None:
+  output_file_name = f"{input_file_name}_SOLUTION_{math.ceil(distance)}.txt"
+  output_path = os.path.join(os.getcwd(), "output", output_file_name)
 
-  os.makedirs(os.path.dirname(out_path), exist_ok = True)
+  os.makedirs(os.path.dirname(output_path), exist_ok = True)
 
   try:
-    with open(out_path, 'w') as file:
+    with open(output_path, 'w') as file:
       for node in route:
         file.write(f"{node + 1}\n") # each subsequent line is a node index
 
@@ -154,14 +153,17 @@ def save_route_to_file(route: list[int], distance: float, n: int, input_file_nam
     exit()
 
 
-  print(f"Route written to disk as {out_file_name}")
+  print(f"Route written to disk as {output_file_name}")
 
   return
 
 
 def run_random_anytime() -> None:
-  in_file_name = input("Enter the name of file: ")
-  coordinates = load_coordinate_data(in_file_name)
+  input_file_name = input("Enter the name of file: ")
+  coordinates = load_coordinate_data(input_file_name)
+
+  # remove .txt extension before passing to other functions for append
+  input_file_name = os.path.splitext(input_file_name)[0]
 
   n = len(coordinates)
   print(f"There are {n} nodes, computing route..")
@@ -170,14 +172,17 @@ def run_random_anytime() -> None:
 
   best_route, best_distance = anytime_random(distance_matrix, n)
 
-  save_route_to_file(best_route, best_distance, n, in_file_name)
+  save_route_to_text_file(best_route, best_distance, n, input_file_name)
 
-  file_name = os.path.join(os.getcwd(), "output", f"{in_file_name}_visualization.png")
-  visualize_solution(coordinates, best_route, best_distance, file_name, title="Random Anytime Route")
+  visualize_solution(coordinates, best_route, best_distance, input_file_name, title="Random Anytime Route")
 
   return
 
-def visualize_solution(coordinates: list[tuple[float, float]], route: list[int], dist: float, file_name:str, title: str):
+
+def visualize_solution(coordinates: list[tuple[float, float]], route: list[int], distance: float, input_file_name: str, title: str):
+  output_file_name = f"{input_file_name}_SOLUTION_{math.ceil(distance)}.png"
+  output_path = os.path.join(os.getcwd(), "output", output_file_name)
+
   fig, ax = plt.subplots(figsize=(12, 10))
   x_coords = [c[0] for c in coordinates]
   y_coords = [c[1] for c in coordinates]
@@ -186,18 +191,20 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
     from_i = route[i]
     to_i = route[i+1]
     ax.plot([x_coords[from_i], x_coords[to_i]],[y_coords[from_i], y_coords[to_i]],'g-', linewidth=1.5, alpha=0.7, zorder=1)
-            
+
   ax.scatter(x_coords, y_coords, c='blue', s=50, zorder=2, edgecolors='white', linewidths=0.5)
-  
+
   # Start / End nodes indicated via dark green dot
   ax.scatter(x_coords[0], y_coords[0], c='darkgreen', s=150, zorder=3, edgecolors='green', linewidths=2)
 
-  ax.text(0.01, 0.01, f'Length of the solution path is {dist:.1f} meters', transform=ax.transAxes, fontsize=12)
-  
+  ax.text(0.01, 0.01, f'Length of the solution path is {distance:.1f} meters', transform=ax.transAxes, fontsize=12)
+
   ax.set_title(title, fontsize=18, fontweight='bold', pad=20)
 
-  plt.savefig(file_name)
-  print(f"Route saved to disk as {file_name}_visualization.png")
+  plt.savefig(output_path)
+
+  print(f"Route image saved to disk as {output_file_name}")
+
   return
 
 
