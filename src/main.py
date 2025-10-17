@@ -73,9 +73,8 @@ def print_distance_matrix(distance_matrix: list[list[float]], n: int) -> None:
 
 def compute_route_distance(route: list[int], distance_matrix: list[list[float]], n: int) -> float:
   total_distance = 0.0
-  num_edges = n - 1 # we want how many edges, not nodes
 
-  for i in range(num_edges):
+  for i in range(n):
     from_node = route[i]
     to_node = route[i + 1]
 
