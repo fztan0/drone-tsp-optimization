@@ -7,7 +7,6 @@ import threading
 import matplotlib.pyplot as plt
 
 enter_key_flag = False
-anytime_flag = False
 
 def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
   # assuming we are firing from project root
@@ -100,9 +99,7 @@ def generate_random_route(n: int) -> list[int]:
   middle = random.sample(range(1, n), n - 1) # for sequence [1, n), pick k = n - 1 (ALL) items without replacement
   return [0] + middle + [0] # "always returning to the starting point (the recharge bay)"
 
-def generate_nearestNeighbor_route(n: int, distance_matrix: list[list[float]]) -> list[int]:
-  global anytime_flag
-
+def generate_nearestNeighbor_route(n: int, distance_matrix: list[list[float]], anytime_flag: bool) -> list[int]:
   remaining_locations = {}
   routes = []
   #initialize the dictionary
@@ -125,10 +122,10 @@ def generate_nearestNeighbor_route(n: int, distance_matrix: list[list[float]]) -
         secondShortestLocation = shortestLocation
         shortestNodeDist = distance_matrix[selectedLocation][remaining_locations[x]]
         shortestLocation = remaining_locations[x]
-    if anytime_flag == True and len(remaining_locations != 2):
+    if anytime_flag == True and len(remaining_locations) != 2:
       #Longer node has 1/10 probability
       outcome = [secondShortestLocation, shortestLocation]
-      result = random.choices(outcome, weights=weight, k=1)
+      result = random.choices(outcome, weights=weight, k=1)[0]
       routes.append(result)
     else:
       routes.append(shortestLocation)
@@ -184,7 +181,7 @@ def anytime_BSF(distance_matrix: list[list[float]], n: int) -> tuple[list[int], 
   global enter_key_flag
 
   # initial best route and distance
-  best_route_so_far = generate_nearestNeighbor_route(n, distance_matrix)
+  best_route_so_far = generate_nearestNeighbor_route(n, distance_matrix, True)
   best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
 
   print("    Shortest Route Discovered So Far")
@@ -195,10 +192,9 @@ def anytime_BSF(distance_matrix: list[list[float]], n: int) -> tuple[list[int], 
   # spawn a thread to listen for 'Enter' key press and change while loot flag
   listener_thread = threading.Thread(target = wait_enter_key)
   listener_thread.start()
-  anytime_flag = True
 
   while not enter_key_flag:
-    new_route = generate_nearestNeighbor_route(n, distance_matrix)
+    new_route = generate_nearestNeighbor_route(n, distance_matrix, True)
     new_distance = compute_route_distance(new_route, distance_matrix, n)
 
     if new_distance < best_distance_so_far:
