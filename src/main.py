@@ -7,6 +7,7 @@ import threading
 import matplotlib.pyplot as plt
 
 enter_key_flag = False
+anytime_flag = False
 
 def load_coordinate_data(file_name: str) -> list[tuple[float, float]]:
   # assuming we are firing from project root
@@ -88,6 +89,41 @@ def generate_random_route(n: int) -> list[int]:
   middle = random.sample(range(1, n), n - 1) # for sequence [1, n), pick k = n - 1 (ALL) items without replacement
   return [0] + middle + [0] # "always returning to the starting point (the recharge bay)"
 
+def generate_nearestNeighbor_route(n: int, distance_matrix: list[list[float]]) -> list[int]:
+  global anytime_flag
+
+  remaining_locations = {}
+  routes = []
+  #initialize the dictionary
+  for i in range(n):
+    remaining_locations[i] = i
+
+  secondShortestLocation = 0
+  selectedLocation = 0
+  shortestLocation = 0
+  routes.append(0)
+  weight = [0.1, 0.9]
+  while len(remaining_locations) > 1:
+    shortestNodeDist = math.inf
+    #pop off value
+    selectedLocation = remaining_locations.pop(shortestLocation)
+    #iterates through remaining locations to find the shortest distance
+    for x in remaining_locations:
+      if(shortestNodeDist > distance_matrix[selectedLocation][remaining_locations[x]]):
+        #keeps track of second shortest
+        secondShortestLocation = shortestLocation
+        shortestNodeDist = distance_matrix[selectedLocation][remaining_locations[x]]  
+        shortestLocation = remaining_locations[x]
+    if anytime_flag == True and len(remaining_locations != 2):
+      #Longer node has 1/10 probability
+      outcome = [secondShortestLocation, shortestLocation]
+      result = random.choices(outcome, weights=weight, k=1)
+      routes.append(result)
+    else:
+      routes.append(shortestLocation)
+  routes.append(0)
+  return routes
+
 def wait_enter_key() -> None:
   global enter_key_flag
   input() # input() already waits for 'Enter' sooooo
@@ -113,6 +149,45 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   while not enter_key_flag:
     new_route = generate_random_route(n)
+    new_distance = compute_route_distance(new_route, distance_matrix, n)
+
+    if new_distance < best_distance_so_far:
+      best_route_so_far = new_route
+      best_distance_so_far = new_distance
+
+      print(f"        {math.ceil(best_distance_so_far)}")
+
+  # elapsed_time = time.time() - start_time
+
+  # neat trick to erase the newline created by input() in wait_enter_key(), ANSI so kinda hacky
+  # https://stackoverflow.com/questions/76236463/python-2-print-overwrite
+  print( "\033[F\033[2K", end="", flush=True )
+
+  # Ouput side effect
+  if best_distance_so_far > 6000:
+    print(f"Warning: Solution is {math.ceil(best_distance_so_far)}, greater than the 6000-meter constraint.")
+
+  return best_route_so_far, best_distance_so_far
+
+def anytime_BSF(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
+  global enter_key_flag
+
+  # initial best route and distance
+  best_route_so_far = generate_nearestNeighbor_route(n, distance_matrix)
+  best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
+
+  print("    Shortest Route Discovered So Far")
+  print(f"        {math.ceil(best_distance_so_far)}")
+
+  # start_time = time.time()
+
+  # spawn a thread to listen for 'Enter' key press and change while loot flag
+  listener_thread = threading.Thread(target = wait_enter_key)
+  listener_thread.start()
+  anytime_flag = True
+  
+  while not enter_key_flag:
+    new_route = generate_nearestNeighbor_route(n, distance_matrix)
     new_distance = compute_route_distance(new_route, distance_matrix, n)
 
     if new_distance < best_distance_so_far:
@@ -177,6 +252,26 @@ def run_random_anytime() -> None:
 
   return
 
+def run_BSF_anytime() -> None:
+  input_file_name = input("Enter the name of file: ")
+  coordinates = load_coordinate_data(input_file_name)
+
+  # remove .txt extension before passing to other functions for append
+  input_file_name = os.path.splitext(input_file_name)[0]
+
+  n = len(coordinates)
+  print(f"There are {n} nodes, computing route..")
+
+  distance_matrix = compute_distance_matrix(coordinates, n)
+
+  best_route, best_distance = anytime_BSF(distance_matrix, n)
+
+  save_route_to_text_file(best_route, best_distance, n, input_file_name)
+
+  visualize_solution(coordinates, best_route, best_distance, input_file_name, title="Best Route So Far")
+
+  return
+
 
 def visualize_solution(coordinates: list[tuple[float, float]], route: list[int], distance: float, input_file_name: str, title: str):
   output_file_name = f"{input_file_name}_SOLUTION_{math.ceil(distance)}.png"
@@ -209,7 +304,8 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
 
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def main() -> None:
-  run_random_anytime()
+  #run_random_anytime()
+  run_BSF_anytime()
 
 
 
