@@ -109,26 +109,35 @@ def generate_nearestNeighbor_route(n: int, distance_matrix: list[list[float]], a
   secondShortestLocation = 0
   selectedLocation = 0
   shortestLocation = 0
+  result = 0
   routes.append(0)
   weight = [0.1, 0.9]
   while len(remaining_locations) > 1:
     shortestNodeDist = math.inf
     #pop off value
-    selectedLocation = remaining_locations.pop(shortestLocation)
+    selectedLocation = remaining_locations.pop(result)
     #iterates through remaining locations to find the shortest distance
     for x in remaining_locations:
       if(shortestNodeDist > distance_matrix[selectedLocation][remaining_locations[x]]):
-        #keeps track of second shortest
-        secondShortestLocation = shortestLocation
+        #ensures the secondShortestLocation is from one of the valid remaining_locations
+        if shortestLocation in remaining_locations:
+          secondShortestLocation = shortestLocation
+        else:
+          secondShortestLocation = None
         shortestNodeDist = distance_matrix[selectedLocation][remaining_locations[x]]
         shortestLocation = remaining_locations[x]
     if anytime_flag == True and len(remaining_locations) != 2:
-      #Longer node has 1/10 probability
-      outcome = [secondShortestLocation, shortestLocation]
+      #edge case removing the secondShortestLocation if there is none.
+      outcome = [node for node in [secondShortestLocation, shortestLocation] if node in remaining_locations]
+      if len(outcome) == 1:
+        weight = [1]
+      else: 
+        #Longer node has 1/10 probability
+        weight = [0.1,0.9]
       result = random.choices(outcome, weights=weight, k=1)[0]
-      routes.append(result)
     else:
-      routes.append(shortestLocation)
+      result = shortestLocation
+    routes.append(result)
   routes.append(0)
   return routes
 
