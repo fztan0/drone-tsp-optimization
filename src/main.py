@@ -159,7 +159,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
     new_route = generate_random_route(n)
     new_distance = compute_route_distance(new_route, distance_matrix, n)
 
-    if new_distance < best_distance_so_far:
+    if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
       best_route_so_far = new_route
       best_distance_so_far = new_distance
 
@@ -197,7 +197,7 @@ def anytime_BSF(distance_matrix: list[list[float]], n: int) -> tuple[list[int], 
     new_route = generate_nearestNeighbor_route(n, distance_matrix, True)
     new_distance = compute_route_distance(new_route, distance_matrix, n)
 
-    if new_distance < best_distance_so_far:
+    if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
       best_route_so_far = new_route
       best_distance_so_far = new_distance
 
