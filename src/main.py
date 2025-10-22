@@ -147,6 +147,10 @@ def wait_enter_key() -> None:
   input() # input() already waits for 'Enter' sooooo
   enter_key_flag = True
 
+def reset_enter_key_flag() -> None:
+  global enter_key_flag
+  enter_key_flag = False
+
 
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
@@ -196,7 +200,7 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
   print("    Shortest Route Discovered So Far")
   print(f"        {ceil_with_tolerance(best_distance_so_far)}")
 
-  # start_time = time.time()
+  start_time = time.time()
 
   # spawn a thread to listen for 'Enter' key press and change while loot flag
   listener_thread = threading.Thread(target = wait_enter_key)
@@ -212,7 +216,7 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
 
       print(f"        {ceil_with_tolerance(best_distance_so_far)}")
 
-  # elapsed_time = time.time() - start_time
+  elapsed_time = time.time() - start_time
 
   # neat trick to erase the newline created by input() in wait_enter_key(), ANSI so kinda hacky
   # https://stackoverflow.com/questions/76236463/python-2-print-overwrite
@@ -222,7 +226,7 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
   if best_distance_so_far > 6000:
     print(f"Warning: Solution is {ceil_with_tolerance(best_distance_so_far)}, greater than the 6000-meter constraint.")
 
-  return best_route_so_far, best_distance_so_far
+  return best_route_so_far, best_distance_so_far, elapsed_time
 
 
 def save_route_to_text_file(route: list[int], distance: float, n: int, input_file_name: str) -> None:
@@ -266,9 +270,11 @@ def run_random_anytime() -> None:
 
   visualize_solution(coordinates, best_route, best_distance, input_file_name, title="Random Anytime Route")
 
+  reset_enter_key_flag()
+
   return
 
-def run_nearest_rrandom_anytime() -> None:
+def run_nearest_random_anytime() -> None:
   input_file_name = input("Enter the name of file: ")
   coordinates = load_coordinate_data(input_file_name)
 
@@ -280,11 +286,13 @@ def run_nearest_rrandom_anytime() -> None:
 
   distance_matrix = compute_distance_matrix(coordinates, n)
 
-  best_route, best_distance = anytime_nearest_random(distance_matrix, n)
+  best_route, best_distance, elapsed_time = anytime_nearest_random(distance_matrix, n)
 
   save_route_to_text_file(best_route, best_distance, n, input_file_name)
 
   visualize_solution(coordinates, best_route, best_distance, input_file_name, title="Best Route So Far")
+
+  reset_enter_key_flag()
 
   return
 
@@ -321,7 +329,7 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def main() -> None:
   run_random_anytime()
-  # run_BSF_anytime()
+  run_nearest_random_anytime()
 
 
 
