@@ -382,68 +382,68 @@ def main() -> None:
 
 
 
-  input_file_name = "32Almonds.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "32Almonds.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "32Square320.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "32Square320.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "64Walnut.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "64Walnut.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "128Circle201.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "128Circle201.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "128Hazelnut.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "128Hazelnut.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "250Square320.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "250Square320.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "256Cashew.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
-  benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
-  benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
+  # input_file_name = "256Cashew.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
+  # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
+  # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
 
 
