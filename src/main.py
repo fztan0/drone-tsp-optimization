@@ -329,6 +329,9 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def main() -> None:
   run_random_anytime()
+
+
+
   run_nearest_random_anytime()
 
 
