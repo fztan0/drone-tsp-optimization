@@ -333,6 +333,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
 
   best_route = route_generator()
   best_distance = compute_route_distance(best_route, distance_matrix, n)
+  print(f"        {ceil_with_tolerance(best_distance)}")
 
   while time.time() - start_time < duration_s:
     new_route = route_generator()
@@ -341,6 +342,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
     if new_distance < best_distance:
       best_route = new_route
       best_distance = new_distance
+      print(f"        {ceil_with_tolerance(best_distance)}")
 
   return best_route, best_distance
 
