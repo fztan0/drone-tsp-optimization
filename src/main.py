@@ -302,6 +302,7 @@ def visualize_solution(coordinates: list[tuple[float, float]], route: list[int],
   output_path = os.path.join(os.getcwd(), "output", output_file_name)
 
   fig, ax = plt.subplots(figsize=(19.2, 10.8))
+  ax.set_aspect('equal', adjustable='box')
   x_coords = [c[0] for c in coordinates]
   y_coords = [c[1] for c in coordinates]
 
@@ -375,7 +376,7 @@ def anytime_nearest_timed(distance_matrix, n, duration_s):
 
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def main() -> None:
-  run_random_anytime()
+  #run_random_anytime()
 
   run_nearest_random_anytime()
 
