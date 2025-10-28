@@ -347,7 +347,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
   return best_route, best_distance
 
 
-def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, durations_list = [7200], iterations = 1):
+def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, durations_list = [3600], iterations = 1):
     print(f"\nBenchmarking {algorithm_name}...")
     print(f"{'Duration (s)':>10} | {'Average BSF':>10} | {'STD Dev':>10}")
     print("-" * 40)
