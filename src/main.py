@@ -177,7 +177,8 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
       best_route_so_far = new_route
       best_distance_so_far = new_distance
 
-      print(f"        {ceil_with_tolerance(best_distance_so_far)}")
+      elapsed = time.time() - start_time
+      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
 
   elapsed_time = time.time() - start_time
 
@@ -214,7 +215,8 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
       best_route_so_far = new_route
       best_distance_so_far = new_distance
 
-      print(f"        {ceil_with_tolerance(best_distance_so_far)}")
+      elapsed = time.time() - start_time
+      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
 
   elapsed_time = time.time() - start_time
 
@@ -333,7 +335,9 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
 
   best_route = route_generator()
   best_distance = compute_route_distance(best_route, distance_matrix, n)
-  print(f"        {ceil_with_tolerance(best_distance)}")
+  current_time = time.time()
+  elapsed = current_time - start_time
+  print(f"        {ceil_with_tolerance(best_distance)} found at {elapsed:.2f}s")
 
   while time.time() - start_time < duration_s:
     new_route = route_generator()
@@ -342,7 +346,9 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
     if new_distance < best_distance:
       best_route = new_route
       best_distance = new_distance
-      print(f"        {ceil_with_tolerance(best_distance)}")
+      current_time = time.time()
+      elapsed = current_time - start_time
+      print(f"        {ceil_with_tolerance(best_distance)} found at {elapsed:.2f}s")
 
   return best_route, best_distance
 
