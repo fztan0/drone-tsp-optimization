@@ -75,11 +75,26 @@ def print_distance_matrix(distance_matrix: list[list[float]], n: int) -> None:
 def compute_route_distance(route: list[int], distance_matrix: list[list[float]], n: int) -> float:
   total_distance = 0.0
 
+  # check chain of distance
   for i in range(n):
     from_node = route[i]
     to_node = route[i + 1]
-
     total_distance += distance_matrix[from_node][to_node]
+
+  return total_distance
+
+def early_abandonment_compute_route_distance(route: list[int], distance_matrix: list[list[float]], n: int, current_best: float = None) -> float:
+  total_distance = 0.0
+
+  # check chain of distance
+  for i in range(n):
+    from_node = route[i]
+    to_node = route[i + 1]
+    total_distance += distance_matrix[from_node][to_node]
+
+    # early abandonment if current total exceeds best known distance, edge case current best is first iteration and is therefore None type
+    if current_best is not None and total_distance > current_best:
+      return total_distance  # Return early since this route can't be better
 
   return total_distance
 
@@ -171,7 +186,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   while not enter_key_flag:
     new_route = generate_random_route(n)
-    new_distance = compute_route_distance(new_route, distance_matrix, n)
+    new_distance = compute_route_distance(new_route, distance_matrix, n, current_best = best_distance_so_far)
 
     if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
       best_route_so_far = new_route
@@ -191,12 +206,52 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   return best_route_so_far, best_distance_so_far, elapsed_time
 
+def early_abandonment_anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
+  global enter_key_flag
+
+  # initial best route and distance
+  best_route_so_far = generate_random_route(n)
+  best_distance_so_far = early_abandonment_compute_route_distance(best_route_so_far, distance_matrix, n)
+
+  print("    Shortest Route Discovered So Far")
+  print(f"        {ceil_with_tolerance(best_distance_so_far)}")
+
+  start_time = time.time()
+
+  # spawn a thread to listen for 'Enter' key press and change while loot flag
+  listener_thread = threading.Thread(target = wait_enter_key)
+  listener_thread.start()
+
+  while not enter_key_flag:
+    new_route = generate_random_route(n)
+    new_distance = early_abandonment_compute_route_distance(new_route, distance_matrix, n, current_best = best_distance_so_far)
+
+    if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
+      best_route_so_far = new_route
+      best_distance_so_far = new_distance
+
+      elapsed = time.time() - start_time
+      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
+
+  elapsed_time = time.time() - start_time
+
+  # neat trick to erase the newline created by input() in wait_enter_key(), ANSI so kinda hacky
+  # https://stackoverflow.com/questions/76236463/python-2-print-overwrite
+  print( "\033[F\033[2K", end="", flush=True )
+
+  if best_distance_so_far > 6000:
+    print(f"Warning: Solution is {ceil_with_tolerance(best_distance_so_far)}, greater than the 6000-meter constraint.")
+
+  return best_route_so_far, best_distance_so_far, elapsed_time
+
+
+
 def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int], float, float]:
   global enter_key_flag
 
   # initial best route and distance
   best_route_so_far = generate_nearestNeighbor_route(n, distance_matrix, True)
-  best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
+  best_distance_so_far = early_abandonment_compute_route_distance(best_route_so_far, distance_matrix, n)
 
   print("    Shortest Route Discovered So Far")
   print(f"        {ceil_with_tolerance(best_distance_so_far)}")
@@ -209,7 +264,7 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
 
   while not enter_key_flag:
     new_route = generate_nearestNeighbor_route(n, distance_matrix, True)
-    new_distance = compute_route_distance(new_route, distance_matrix, n)
+    new_distance = early_abandonment_compute_route_distance(new_route, distance_matrix, n, current_best=best_distance_so_far)
 
     if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
       best_route_so_far = new_route
@@ -334,14 +389,14 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
   start_time = time.time()
 
   best_route = route_generator()
-  best_distance = compute_route_distance(best_route, distance_matrix, n)
+  best_distance = early_abandonment_compute_route_distance(best_route, distance_matrix, n, current_best=None)
   current_time = time.time()
   elapsed = current_time - start_time
   print(f"        {ceil_with_tolerance(best_distance)} found at {elapsed:.2f}s")
 
   while time.time() - start_time < duration_s:
     new_route = route_generator()
-    new_distance = compute_route_distance(new_route, distance_matrix, n)
+    new_distance = early_abandonment_compute_route_distance(new_route, distance_matrix, n, current_best=best_distance)
 
     if new_distance < best_distance:
       best_route = new_route
