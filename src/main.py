@@ -360,8 +360,12 @@ def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, dura
         results.append(best_distance)
 
       average = sum(results) / len(results)
-      variance = sum((d - average) ** 2 for d in results) / (len(results) - 1)
-      std_dev = variance ** 0.5
+      if len(results) > 1:
+          variance = sum((d - average) ** 2 for d in results) / (len(results) - 1)
+          std_dev = variance ** 0.5
+      else:
+          variance = 0.0
+          std_dev = 0.0
 
       print(f"{dur:10d} | {ceil_with_tolerance(average):10d} | {std_dev:10.2f}")
 
