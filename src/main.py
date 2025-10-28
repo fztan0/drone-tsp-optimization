@@ -408,7 +408,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
   return best_route, best_distance
 
 
-def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, durations_list = [3600], iterations = 1):
+def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, durations_list = [0.25], iterations = 10):
     print(f"\nBenchmarking {algorithm_name}...")
     print(f"{'Duration (s)':>10} | {'Average BSF':>10} | {'STD Dev':>10}")
     print("-" * 40)
@@ -428,7 +428,7 @@ def benchmark_anytime(distance_matrix, n, algorithm_name, anytime_function, dura
           variance = 0.0
           std_dev = 0.0
 
-      print(f"{dur:10d} | {ceil_with_tolerance(average):10d} | {std_dev:10.2f}")
+      print(f"{dur:10.2f} | {ceil_with_tolerance(average):10d} | {std_dev:10.2f}")
 
 
 def anytime_random_timed(distance_matrix, n, duration_s):
@@ -455,10 +455,13 @@ def timed_random_iterations(distance_matrix, n, duration_s):
     iteration_count += 1
 
     current_time = time.time()
-    if current_time - last_report_time >= 10:
-      elapsed = current_time - start_time
-      print(f"[Random] Iterations: {iteration_count} after {elapsed:.1f}s")
-      last_report_time = current_time
+
+    elapsed_since_last_report = current_time - last_report_time
+
+    if elapsed_since_last_report >= 10:
+        elapsed_total = current_time - start_time
+        print(f"[Random] Iterations: {iteration_count} after {elapsed_total:.1f}s @ {best_distance:.2f}")
+        last_report_time = current_time
 
   return iteration_count
 
@@ -481,9 +484,14 @@ def timed_early_abandonment_iterations(distance_matrix, n, duration_s):
     iteration_count += 1
 
     current_time = time.time()
-    if current_time - last_report_time >= 10:
-      elapsed = current_time - start_time
-      print(f"[Early Abandon] Iterations: {iteration_count} after {elapsed:.1f}s")
+
+    elapsed_since_last_report = current_time - last_report_time
+
+
+
+    if elapsed_since_last_report >= 10:
+      elapsed_total = current_time - start_time
+      print(f"[Early Abandon] Iterations: {iteration_count} after {elapsed_total:.1f}s @ {best_distance:.2f}")
       last_report_time = current_time
 
   return iteration_count
@@ -495,7 +503,7 @@ def timed_early_abandonment_iterations(distance_matrix, n, duration_s):
 def main() -> None:
   # run_random_anytime()
 
-  run_nearest_random_anytime()
+  # run_nearest_random_anytime()
 
 
   # input_file_name = "32Almonds.txt"
@@ -558,20 +566,32 @@ def main() -> None:
   # n = len(coordinates)
   # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
   # distance_matrix = compute_distance_matrix(coordinates, n)
-
   # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
   # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  # compare iterations for random vs  random + early abandonment
-  # duration = 3600  # seconds
-  # print("\niterations per second for 1 hour:")
-  # random_count = timed_random_iterations(distance_matrix, n, duration)
-  # early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
 
-  # print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
-  # print("-" * 40)
-  # print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
-  # print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
+
+
+
+  # compare iterations for random vs  random + early abandonment
+
+
+  input_file_name = "256Cashew.txt"
+  coordinates = load_coordinate_data(input_file_name)
+  input_file_name = os.path.splitext(input_file_name)[0]
+  n = len(coordinates)
+  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  distance_matrix = compute_distance_matrix(coordinates, n)
+
+  duration = 3700  # seconds
+  print(f"\niterations per second for {duration}:")
+  random_count = timed_random_iterations(distance_matrix, n, duration)
+  early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
+
+  print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
+  print("-" * 40)
+  print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
+  print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
 
 
 
