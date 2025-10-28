@@ -173,7 +173,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   # initial best route and distance
   best_route_so_far = generate_random_route(n)
-  best_distance_so_far = compute_route_distance(best_route_so_far, distance_matrix, n)
+  best_distance_so_far = early_abandonment_compute_route_distance(best_route_so_far, distance_matrix, n)
 
   print("    Shortest Route Discovered So Far")
   print(f"        {ceil_with_tolerance(best_distance_so_far)}")
@@ -186,7 +186,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
 
   while not enter_key_flag:
     new_route = generate_random_route(n)
-    new_distance = compute_route_distance(new_route, distance_matrix, n, current_best = best_distance_so_far)
+    new_distance = early_abandonment_compute_route_distance(new_route, distance_matrix, n, current_best = best_distance_so_far)
 
     if ceil_with_tolerance(new_distance) < ceil_with_tolerance(best_distance_so_far):
       best_route_so_far = new_route
@@ -495,7 +495,7 @@ def timed_early_abandonment_iterations(distance_matrix, n, duration_s):
 def main() -> None:
   # run_random_anytime()
 
-  # run_nearest_random_anytime()
+  run_nearest_random_anytime()
 
 
   # input_file_name = "32Almonds.txt"
@@ -552,26 +552,26 @@ def main() -> None:
   # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
   # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
-  input_file_name = "256Cashew.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
+  # input_file_name = "256Cashew.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
 
   # benchmark_anytime(distance_matrix, n, "Random Anytime", anytime_random_timed)
   # benchmark_anytime(distance_matrix, n, "Augmented Nearest Anytime", anytime_nearest_timed)
 
   # compare iterations for random vs  random + early abandonment
-  duration = 3600  # seconds
-  print("\niterations per second for 1 hour:")
-  random_count = timed_random_iterations(distance_matrix, n, duration)
-  early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
+  # duration = 3600  # seconds
+  # print("\niterations per second for 1 hour:")
+  # random_count = timed_random_iterations(distance_matrix, n, duration)
+  # early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
 
-  print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
-  print("-" * 40)
-  print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
-  print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
+  # print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
+  # print("-" * 40)
+  # print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
+  # print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
 
 
 
