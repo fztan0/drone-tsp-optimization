@@ -193,7 +193,7 @@ def anytime_random(distance_matrix: list[list[float]], n: int) -> tuple[list[int
       best_distance_so_far = new_distance
 
       elapsed = time.time() - start_time
-      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
+      print(f"        {ceil_with_tolerance(best_distance_so_far)}")
 
   elapsed_time = time.time() - start_time
 
@@ -231,7 +231,7 @@ def early_abandonment_anytime_random(distance_matrix: list[list[float]], n: int)
       best_distance_so_far = new_distance
 
       elapsed = time.time() - start_time
-      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
+      print(f"        {ceil_with_tolerance(best_distance_so_far)}")
 
   elapsed_time = time.time() - start_time
 
@@ -271,7 +271,7 @@ def anytime_nearest_random(distance_matrix: list[list[float]], n: int) -> tuple[
       best_distance_so_far = new_distance
 
       elapsed = time.time() - start_time
-      print(f"        {ceil_with_tolerance(best_distance_so_far)} found at {elapsed:.2f}s")
+      print(f"        {ceil_with_tolerance(best_distance_so_far)}")
 
   elapsed_time = time.time() - start_time
 
@@ -392,7 +392,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
   best_distance = early_abandonment_compute_route_distance(best_route, distance_matrix, n, current_best=None)
   current_time = time.time()
   elapsed = current_time - start_time
-  print(f"        {ceil_with_tolerance(best_distance)} found at {elapsed:.2f}s")
+  print(f"        {ceil_with_tolerance(best_distance)}")
 
   while time.time() - start_time < duration_s:
     new_route = route_generator()
@@ -403,7 +403,7 @@ def general_anytime_timed(distance_matrix, n, duration_s, route_generator) -> tu
       best_distance = new_distance
       current_time = time.time()
       elapsed = current_time - start_time
-      print(f"        {ceil_with_tolerance(best_distance)} found at {elapsed:.2f}s")
+      print(f"        {ceil_with_tolerance(best_distance)}")
 
   return best_route, best_distance
 
@@ -503,7 +503,7 @@ def timed_early_abandonment_iterations(distance_matrix, n, duration_s):
 def main() -> None:
   # run_random_anytime()
 
-  # run_nearest_random_anytime()
+  run_nearest_random_anytime()
 
 
   # input_file_name = "32Almonds.txt"
@@ -576,22 +576,22 @@ def main() -> None:
   # compare iterations for random vs  random + early abandonment
 
 
-  input_file_name = "256Cashew.txt"
-  coordinates = load_coordinate_data(input_file_name)
-  input_file_name = os.path.splitext(input_file_name)[0]
-  n = len(coordinates)
-  print(f"There are {n} nodes, benchmarking both anytime algorithms..")
-  distance_matrix = compute_distance_matrix(coordinates, n)
+  # input_file_name = "256Cashew.txt"
+  # coordinates = load_coordinate_data(input_file_name)
+  # input_file_name = os.path.splitext(input_file_name)[0]
+  # n = len(coordinates)
+  # print(f"There are {n} nodes, benchmarking both anytime algorithms..")
+  # distance_matrix = compute_distance_matrix(coordinates, n)
 
-  duration = 3700  # seconds
-  print(f"\niterations per second for {duration}:")
-  random_count = timed_random_iterations(distance_matrix, n, duration)
-  early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
+  # duration = 3700  # seconds
+  # print(f"\niterations per second for {duration}:")
+  # random_count = timed_random_iterations(distance_matrix, n, duration)
+  # early_abandon_count = timed_early_abandonment_iterations(distance_matrix, n, duration)
 
-  print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
-  print("-" * 40)
-  print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
-  print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
+  # print(f"{'Algorithm':<25} | {'Iterations':>10} | {'Iterations/s':>12}")
+  # print("-" * 40)
+  # print(f"{'Random':<25} | {random_count:10d} | {random_count / duration:12.2f}")
+  # print(f"{'Early Abandonment':<25} | {early_abandon_count:10d} | {early_abandon_count / duration:12.2f}")
 
 
 
