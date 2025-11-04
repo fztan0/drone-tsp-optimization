@@ -8,6 +8,7 @@ AI solution for finding optimal drone routes for pheromone distribution in orcha
 4. Press Enter to stop optimization and save results
 
 ## Output Files
+- Output files are placed inside `/output` folder. If it doesn't exist, it will be created after the need to place the files inside by the program.
 - `[filename]_SOLUTION_[distance].txt`: Node visitation order
 - `[filename]_SOLUTION_[distance].png`: Route visualization
 
