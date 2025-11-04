@@ -1,8 +1,16 @@
 # drone-tsp-optimization
-AI solution for finding optimal drone route to distribute pheromones in orchards / farms.
+AI solution for finding optimal drone routes for pheromone distribution in orchards using TSP optimization.
 
-## Use
+## Usage
+1. Place coordinate files in `/data` directory
+2. Run `python src/main.py`
+3. Enter filename when prompted (e.g. `32Almonds.txt`)
+4. Press Enter to stop optimization and save results
 
-## Output
+## Output Files
+- `[filename]_SOLUTION_[distance].txt`: Node visitation order
+- `[filename]_SOLUTION_[distance].png`: Route visualization
 
-## Visualization
+## Dependencies
+- Python 3.10+
+- matplotlib (`pip install matplotlib`)
