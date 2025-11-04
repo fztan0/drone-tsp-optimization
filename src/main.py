@@ -376,7 +376,7 @@ def anytime_nearest_timed(distance_matrix, n, duration_s):
 
 # MAKE SURE: when outputting every BSF/final, USE NEAREST INTEGER CEILING
 def main() -> None:
-  run_random_anytime()
+  # run_random_anytime()
 
   run_nearest_random_anytime()
 
